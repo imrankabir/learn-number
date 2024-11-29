@@ -1,5 +1,5 @@
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const grid = document.querySelector('#grid');
+const container = document.querySelector('.container');
 
 const get = (k, d) => JSON.parse(localStorage.getItem(`learn-number-${k}`)) ?? d;
 const set = (k, v) => localStorage.setItem(`learn-number-${k}`, JSON.stringify(v));
@@ -9,7 +9,7 @@ numbers.forEach(number => {
   box.classList.add('box');
 
   const el = document.createElement('div');
-  el.classList.add('letter');
+  el.classList.add('number');
   el.textContent = number;
   box.appendChild(el);
 
@@ -69,7 +69,7 @@ numbers.forEach(number => {
   canvas.addEventListener('touchend', endPosition);
   canvas.addEventListener('touchmove', draw);
 
-  grid.appendChild(box);
+  container.appendChild(box);
 });
 
 document.querySelector('#clear').addEventListener('click', e => {
