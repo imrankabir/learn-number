@@ -1,25 +1,27 @@
-const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-const grid = document.querySelector('#numbersGrid');
-const clearAllButton = document.querySelector('#clearAll');
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const grid = document.querySelector('#grid');
+
+const get = (k, d) => JSON.parse(localStorage.getItem(`learn-number-${k}`)) ?? d;
+const set = (k, v) => localStorage.setItem(`learn-number-${k}`, JSON.stringify(v));
 
 numbers.forEach(number => {
-  const numberBox = document.createElement('div');
-  numberBox.classList.add('letter-box');
+  const box = document.createElement('div');
+  box.classList.add('box');
 
-  const numberEl = document.createElement('div');
-  numberEl.classList.add('letter');
-  numberEl.textContent = number;
-  numberBox.appendChild(numberEl);
+  const el = document.createElement('div');
+  el.classList.add('letter');
+  el.textContent = number;
+  box.appendChild(el);
 
   const canvas = document.createElement('canvas');
-  canvas.width = 150;
-  canvas.height = 150;
-  numberBox.appendChild(canvas);
+  canvas.width = 120;
+  canvas.height = 120;
+  box.appendChild(canvas);
 
   const ctx = canvas.getContext('2d');
   let isDrawing = false;
 
-  const getCoordinates = (e, c) => {
+  const getCoordinates = (c, e) => {
     const rect = c.getBoundingClientRect();
     if (e.touches) {
       return {
@@ -48,8 +50,8 @@ numbers.forEach(number => {
 
   const draw = e => {
     if (isDrawing) {
-      const { x, y } = getCoordinates(e, canvas);
-      ctx.lineWidth = 3;
+      const { x, y } = getCoordinates(canvas, e);
+      ctx.lineWidth = 5;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#000';
       ctx.lineTo(x, y);
@@ -67,13 +69,12 @@ numbers.forEach(number => {
   canvas.addEventListener('touchend', endPosition);
   canvas.addEventListener('touchmove', draw);
 
-  grid.appendChild(numberBox);
+  grid.appendChild(box);
 });
 
-clearAllButton.addEventListener('click', e => {
-  const canvases = document.querySelectorAll('canvas');
-  canvases.forEach((canvas) => {
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+document.querySelector('#clear').addEventListener('click', e => {
+  document.querySelectorAll('canvas').forEach(c => {
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, c.width, c.height);
   });
 });
